@@ -37,6 +37,7 @@ import net.minecraft.world.item.crafting.SimpleRecipeSerializer;
 import net.minecraft.world.level.block.Blocks;
 
 import java.util.List;
+import java.util.Map;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
@@ -50,6 +51,11 @@ public class HexplatRecipes extends PaucalRecipeProvider {
         HexBlocks.EDIFIED_LOG, HexBlocks.EDIFIED_LOG_AMETHYST,
         HexBlocks.EDIFIED_LOG_AVENTURINE, HexBlocks.EDIFIED_LOG_CITRINE,
         HexBlocks.EDIFIED_LOG_PURPLE);
+
+    private final Map<BlockAkashicLog, BlockAkashicLog> EDIFIED_LOG_TO_WOOD = Map.ofEntries(
+        Map.entry(HexBlocks.EDIFIED_LOG, HexBlocks.EDIFIED_WOOD),
+        Map.entry(HexBlocks.STRIPPED_EDIFIED_LOG, HexBlocks.STRIPPED_EDIFIED_WOOD),
+    );
 
     public HexplatRecipes(DataGenerator generator, IXplatIngredients ingredients,
         Function<RecipeBuilder, IXplatConditionsBuilder> conditions) {
@@ -305,8 +311,10 @@ public class HexplatRecipes extends PaucalRecipeProvider {
             .requires(HexTags.Items.EDIFIED_LOGS)
             .unlockedBy("has_item", hasItem(HexTags.Items.EDIFIED_LOGS)).save(recipes);
 
-        for (var log : EDIFIED_LOGS) {
-            ShapedRecipeBuilder.shaped(log, 3)
+        for (var entry: EDIFIED_LOG_TO_WOOD.entrySet()) {
+            var log = entry.getKey();
+            var wood = entry.getValue();
+            ShapedRecipeBuilder.shaped(wood, 3)
                 .define('W', log)
                 .pattern("WW")
                 .pattern("WW")
